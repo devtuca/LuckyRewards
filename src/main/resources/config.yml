@@ -1,5 +1,5 @@
 rewards:
   'r1':
     id: 1
-    serialied: 'String serializada do inventario do player q deu o comando'
+    serialized: 'String serializada do inventario do player q deu o comando'
     delay: 0

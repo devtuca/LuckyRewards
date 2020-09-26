@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-
 /**
  * @author Tuca
  * @Github: https://github.com/devtuca
@@ -15,9 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Reward {
 
-    private String id;
+    private int id;
     private String name;
     private int delay;
-    private List<ItemStack> items;
+    private ItemStack[] items;
 
 }

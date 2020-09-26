@@ -1,15 +1,18 @@
 package dev.lucky.listeners;
 
-import dev.lucky.serializers.InventorySerializer;
+import de.tr7zw.nbtapi.NBTItem;
+import dev.lucky.managers.RewardManager;
+import dev.lucky.model.Reward;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.List;
+
 
 /**
  * @author Tuca
@@ -18,10 +21,22 @@ import org.bukkit.inventory.Inventory;
 @RequiredArgsConstructor
 public class RewardInteractListener implements Listener {
 
-    private final InventorySerializer inventorySerializer;
+    private final RewardManager rewardManager;
 
-    //consegue fazer a parte de verificar qnd for uma recompensa?
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+
+        ItemStack item = event.getItem();
+        NBTItem nbtItem = new NBTItem(item);
+
+        if (!nbtItem.hasNBTData()) return;
+
+        Player player = event.getPlayer();
+
+        PlayerInventory items = rewardManager.getItemsByRewardName(nbtItem.getString("LuckyReward"));
+        Reward luckyReward = rewardManager.getRewardByID(nbtItem.getInteger("LuckyReward"));
+        items.forEach(itens -> player.getInventory().addItem(itens));
+        player.sendMessage("§aAbrindo..");
+
     }
 }
