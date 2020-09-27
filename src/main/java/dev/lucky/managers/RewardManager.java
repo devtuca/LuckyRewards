@@ -2,6 +2,7 @@ package dev.lucky.managers;
 
 import dev.lucky.model.Reward;
 import dev.lucky.serializers.InventorySerializer;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 public class RewardManager {
 
     private final FileManager fileManager;// não pode estar inicializada essa variavel, wtf como q n? kk, tenta inicilizar ela no método que precisa
-    private final Map<String, Reward> rewardMap = new HashMap<>();
+    @Getter private final Map<String, Reward> rewardMap = new HashMap<>();
     private final List<ItemStack> rewardItems = new ArrayList<>();
     private final InventorySerializer inventorySerializer;
 
