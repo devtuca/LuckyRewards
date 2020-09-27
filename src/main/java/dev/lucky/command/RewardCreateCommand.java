@@ -1,12 +1,16 @@
 package dev.lucky.command;
 
 import dev.lucky.managers.RewardManager;
-import dev.lucky.serializers.InventorySerializer;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Tuca
@@ -20,25 +24,36 @@ public class RewardCreateCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player p = (Player) sender;
 
-        if(sender == null) return false;
-        if(!p.hasPermission("luckyrewards.rewards.create")) { p.sendMessage("§cVocê não tem permissão."); return false; }
-        if(args.length != 3) p.sendMessage("§cUse: /recompensas criar [id] [nome] [delay] ");
+        Player player = (Player) sender;
 
-        int days;
+        if (sender == null) return false;
 
-        try {
-            days = Integer.parseInt(args[2]);
-        }catch (NumberFormatException e){
-            p.sendMessage("§cDigite um número válido de dias!");
+        if (!player.hasPermission("luckyrewards.rewards.create")) {
+            player.sendMessage("§cVocê não tem permissão.");
             return false;
         }
 
-        rewardManager.createReward(args[0], args[1], days, p.getInventory());
-        p.sendMessage("§aVocê criou uma recompensa com o nome: §2" + args[1]);
+        if (args.length == 4) {
+            //recompensas criar [id] [nome] [delay]
+            if (args[0].equalsIgnoreCase("criar")) {
+                int delay;
+                int id;
 
+                try {
+                    delay = Integer.parseInt(args[3]);
+                    id = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    player.sendMessage("§cDigite um número válido de dias!");
+                    return false;
+                }
 
+                List<ItemStack> lista = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
+                rewardManager.createReward(id, args[2], delay, lista);
+                player.sendMessage("§aVocê criou uma recompensa com o nome: §2" + args[2]);
+                return false;
+            }
+        }
         return false;
     }
 }

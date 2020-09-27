@@ -4,12 +4,14 @@ import dev.lucky.model.Reward;
 import dev.lucky.serializers.InventorySerializer;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * @author Tuca
@@ -19,38 +21,39 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RewardManager {
 
-    private final FileManager fileManager;
-    private final ConfigurationSection section = fileManager.getMainSection().getConfigurationSection("rewards");
+    private final FileManager fileManager;// não pode estar inicializada essa variavel, wtf como q n? kk, tenta inicilizar ela no método que precisa
     private final Map<String, Reward> rewardMap = new HashMap<>();
+    private final List<ItemStack> rewardItems = new ArrayList<>();
     private final InventorySerializer inventorySerializer;
 
-    public void createReward(String id, String name, int delay, PlayerInventory inventory) {
-        section.set(name + ".id", id);
+
+    public void createReward(int id, String name, int delay, List<ItemStack> itemStacks) {
+        ConfigurationSection section = fileManager.getMainSection();
+
         section.set(name + ".id", id);
         section.set(name + ".delay", delay);
-        section.set(name + ".serialized", inventorySerializer.serialize(inventory));
+        section.set(name + ".serialized", inventorySerializer.encode((ItemStack) itemStacks));
+        fileManager.saveConfig();
+
+        rewardMap.put(name, new Reward(id, name, delay, inventory));
     }
 
-    private Reward getRewardByName(String name) {
-        return rewardMap.get(name);
-    }
-
-    public ItemStack[] getItemsByRewardName(String rewardName) {
-        return getRewardByName(rewardName).getItems();
-    }
-
-    public Reward getRewardByID(int id) {
-        for (String reward : section.getKeys(false)) {
-            if (getRewardByName(reward).getId() == id) return getRewardByName(reward);
+    public Reward getRewardByName(String name) {
+        if (rewardMap.containsKey(name)) {
+            return rewardMap.get(name);
+        }
+        ConfigurationSection section = fileManager.getMainSection();
+        for (String key : section.getKeys(false)) {
+            int id = section.getInt(key + ".id");
+            int delay = section.getInt(key + ".delay");
+            Inventory items = inventorySerializer.decode(key + ".serialized");
+            return new Reward(id, key, delay, items);
         }
         return null;
     }
 
-    public boolean rewardUnlocked(Reward reward) {
-        if ()
-    }
-
     public String getRewardList() {
+        ConfigurationSection section = fileManager.getMainSection();
         StringBuilder sb = new StringBuilder();
         for (String rewards : section.getKeys(false)) {
             sb.append(rewards);
@@ -58,23 +61,16 @@ public class RewardManager {
         return sb.toString();
     }
 
-    public void loadRewards() throws IOException {
-
-        for (String key : fileManager.getMainSection().getKeys(true)) {
-
-            int id = section.getInt(key + ".id");
-            String name = section.getString(key + ".name");
-            int delay = section.getInt(key + ".delay");
-            ItemStack[] inventory = inventorySerializer.deserializeFromBase64(section.getString(key + "serialized")).getContents();
-
-            Reward reward = new Reward(id, name, delay, inventory);
-
+    public void loadRewards() {
+        ConfigurationSection section = fileManager.getMainSection();
+        for (String key : section.getKeys(false)) {
+            Reward reward = getRewardByName(key);
             rewardMap.put(key, reward);
-
         }
     }
 
     public void saveDelay() {
+        ConfigurationSection section = fileManager.getMainSection();
         for (String key : section.getKeys(true)) {
             int delay = section.getInt(key + ".delay");
             section.set(key + ".delay", delay);

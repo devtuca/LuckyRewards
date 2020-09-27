@@ -22,11 +22,19 @@ public class FileManager {
         plugin.saveConfig();
     }
 
+    public void checkSections() {
+        if(getMainSection() == null) {
+            fileConfiguration.createSection("rewards");
+            plugin.saveConfig();
+        }
+    }
     public void sendQuery(String path, Object value) {
         plugin.getConfig().set(path, value);
     }
 
     public ConfigurationSection getMainSection() {
-        return fileConfiguration.getConfigurationSection("rewards");
+        ConfigurationSection section = fileConfiguration.getConfigurationSection("rewards");
+        if (section == null) fileConfiguration.createSection("rewards");
+        return section;
     }
 }

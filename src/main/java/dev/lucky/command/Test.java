@@ -1,6 +1,7 @@
 package dev.lucky.command;
 
 import dev.lucky.managers.RewardManager;
+import dev.lucky.model.Reward;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,21 +9,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * @author Tuca
- * @Github: https://github.com/devtuca
+ * @author: Tuca
+ * @GitHub: https://github.com/devtuca
  */
 @RequiredArgsConstructor
-public class RewardListCommand implements CommandExecutor {
+public class Test implements CommandExecutor {
 
     private final RewardManager rewardManager;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        Player p = (Player) sender;
+        Reward rewardByID = rewardManager.getRewardByName(args[0]);
+        Player player = (Player) sender;
 
-        p.sendMessage("§aAtualmente temos essas recompensas: " + rewardManager.getRewardList());
-
+        rewardByID.getItems().forEach(items -> player.getInventory().addItem(items));
         return false;
     }
 }

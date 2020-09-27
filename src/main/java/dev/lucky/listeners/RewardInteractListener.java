@@ -8,11 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
-import java.util.List;
-
 
 /**
  * @author Tuca
@@ -29,14 +26,16 @@ public class RewardInteractListener implements Listener {
         ItemStack item = event.getItem();
         NBTItem nbtItem = new NBTItem(item);
 
+        if (!item.hasItemMeta()) return;
+        if (!item.getItemMeta().hasDisplayName() && !item.getItemMeta().hasLore()) return;
         if (!nbtItem.hasNBTData()) return;
 
         Player player = event.getPlayer();
 
-        PlayerInventory items = rewardManager.getItemsByRewardName(nbtItem.getString("LuckyReward"));
-        Reward luckyReward = rewardManager.getRewardByID(nbtItem.getInteger("LuckyReward"));
-        items.forEach(itens -> player.getInventory().addItem(itens));
-        player.sendMessage("§aAbrindo..");
+        Reward luckyReward = rewardManager.getRewardByName(nbtItem.getString("LuckyReward"));
+
+        player.getInventory().addItem((ItemStack) luckyReward.getItems());
+        player.sendMessage("§aAbrindo recompensa...");
 
     }
 }

@@ -1,3 +1,6 @@
-name: Lucky
+name: LuckyRewards
 version: ${project.version}
 main: dev.lucky.LuckyRewards
+commands:
+  recompensas:
+  testar:
