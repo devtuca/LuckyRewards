@@ -25,7 +25,6 @@ Reward rewardGetByID = RewardManager.getRewardByID(id);
 ### Download
 Download all source code.\
 ![Download](https://i.imgur.com/0sWqvh5.png)
-https://i.imgur.com/5LfJVVC.png
 
 ### Releases
 Download a stable or developing release (.jar file).\
