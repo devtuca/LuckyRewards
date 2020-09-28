@@ -12,6 +12,7 @@ Reward reward = new Reward(rewardName, id, delay);
 int id = reward.getId();
 int delay = reward.getDelay();
 String name = reward.getName();
+List<ItemStack> items = reward.getItems();
 ```
 
 #### Manuseamento
