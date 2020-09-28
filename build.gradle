@@ -1,0 +1,46 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'java'
+}
+
+group = 'dev.lucky'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven { url = 'https://repo.codemc.org/repository/maven-public/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://repo.codemc.org/repository/maven-public/' }
+    maven { url = 'https://jitpack.io/' }
+
+}
+
+dependencies {
+
+    compile('de.tr7zw:item-nbt-api:2.5.0')
+
+    compileOnly ('org.projectlombok:lombok:1.18.12')
+    annotationProcessor ('org.projectlombok:lombok:1.18.12')
+
+    compileOnly ('org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT')
+
+    compile ('com.github.HenryFabio:inventory-api:1.2')
+
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

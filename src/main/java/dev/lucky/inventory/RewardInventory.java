@@ -6,7 +6,7 @@ import com.henryfabio.inventoryapi.inventory.global.GlobalInventory;
 import com.henryfabio.inventoryapi.inventory.paged.PagedInventory;
 import com.henryfabio.inventoryapi.item.InventoryItem;
 import com.henryfabio.inventoryapi.viewer.paged.PagedViewer;
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.lucky.manager.RewardManager;
 import dev.lucky.model.Reward;
 import dev.lucky.util.ItemComposer;
