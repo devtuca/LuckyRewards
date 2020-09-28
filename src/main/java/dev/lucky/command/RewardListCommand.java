@@ -21,7 +21,7 @@ public class RewardListCommand implements CommandExecutor {
 
         Player p = (Player) sender;
 
-        p.sendMessage("§aAtualmente temos essas recompensas: " + rewardManager.getRewardList());
+        p.sendMessage("§aAtualmente temos essas recompensas: ");
 
         return false;
     }

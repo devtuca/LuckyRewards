@@ -1,16 +1,8 @@
 package dev.lucky.command;
 
-import com.henryfabio.inventoryapi.enums.InventoryLine;
-import dev.lucky.inventory.RewardInventory;
-import dev.lucky.managers.RewardManager;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+public class RewardCommand {
 
-public class RewardCommand implements CommandExecutor {
-
-    private final RewardManager rewardManager;
+    /*private final RewardManager rewardManager;
 
     public RewardCommand(RewardManager rewardManager) {
         this.rewardManager = rewardManager;
@@ -37,4 +29,5 @@ public class RewardCommand implements CommandExecutor {
         return false;
     }
 
+}*/
 }

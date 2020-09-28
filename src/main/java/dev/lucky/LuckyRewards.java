@@ -5,7 +5,6 @@ import dev.lucky.command.Test;
 import dev.lucky.listeners.RewardInteractListener;
 import dev.lucky.managers.FileManager;
 import dev.lucky.managers.RewardManager;
-import dev.lucky.serializers.InventorySerializer;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -21,15 +20,13 @@ public final class LuckyRewards extends JavaPlugin {
         saveDefaultConfig();
 
         FileManager fileManager = new FileManager(this, getConfig());
-        InventorySerializer inventorySerializer = new InventorySerializer();
-        RewardManager rewardManager = new RewardManager(fileManager, inventorySerializer);
+        RewardManager rewardManager = new RewardManager(fileManager);
 
         fileManager.checkSections();
 
         rewardManager.loadRewards();
-        rewardManager.saveDelay();
 
-        command("testar", new Test(rewardManager));
+        command("testar", new Test(rewardManager, fileManager));
         command("recompensas", new RewardCreateCommand(rewardManager));
         event(new RewardInteractListener(rewardManager));
     }

@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -24,10 +23,13 @@ public class RewardInteractListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
 
         ItemStack item = event.getItem();
-        NBTItem nbtItem = new NBTItem(item);
 
+
+        if (item == null) return;
         if (!item.hasItemMeta()) return;
         if (!item.getItemMeta().hasDisplayName() && !item.getItemMeta().hasLore()) return;
+
+        NBTItem nbtItem = new NBTItem(item);
         if (!nbtItem.hasNBTData()) return;
 
         Player player = event.getPlayer();

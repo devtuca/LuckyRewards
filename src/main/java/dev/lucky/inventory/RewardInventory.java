@@ -64,7 +64,9 @@ public class RewardInventory extends PagedInventory {
                             ClickType.LEFT,
                             click -> {
                                 List<ItemStack> items = rewardManager.getRewardByName(reward.getName()).getItems();
-                                items.forEach(itemStack -> click.getPlayer().getInventory().addItem(itemStack));
+                                for (ItemStack content : items) {
+                                    click.getPlayer().getInventory().addItem(content);
+                                }
                                 click.getPlayer().sendMessage("§aVocê coletou a recompensa §f" + reward.getName());
                             }
                     )
@@ -72,11 +74,11 @@ public class RewardInventory extends PagedInventory {
                             ClickType.RIGHT,
                             click -> {
 
-                                new GlobalInventory("rewards.rewardView", reward.getName(), InventoryLine.SIX){
+                                new GlobalInventory("rewards.rewardView", reward.getName(), InventoryLine.SIX) {
 
                                     @Override
                                     protected void onCreate(InventoryEditor inventoryEditor) {
-                                        List<ItemStack> items = reward.getItems();
+                                        List<ItemStack> items = rewardManager.getRewardByName(reward.getName()).getItems();
 
                                         AtomicInteger slot = new AtomicInteger();
 

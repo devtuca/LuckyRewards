@@ -6,11 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Tuca
@@ -42,15 +37,14 @@ public class RewardCreateCommand implements CommandExecutor {
 
                 try {
                     delay = Integer.parseInt(args[3]);
-                    id = Integer.parseInt(args[1]);
+                    id = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     player.sendMessage("§cDigite um número válido de dias!");
                     return false;
                 }
 
-                List<ItemStack> lista = new ArrayList<>(Arrays.asList(player.getInventory().getContents()));
-                rewardManager.createReward(id, args[2], delay, lista);
-                player.sendMessage("§aVocê criou uma recompensa com o nome: §2" + args[2]);
+                rewardManager.createReward(args[1], id, delay);
+                player.sendMessage("§aVocê criou uma recompensa com o nome: §2" + args[1]);
                 return false;
             }
         }

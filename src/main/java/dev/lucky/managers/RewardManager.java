@@ -1,18 +1,16 @@
 package dev.lucky.managers;
 
 import dev.lucky.model.Reward;
-import dev.lucky.serializers.InventorySerializer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * @author Tuca
@@ -22,59 +20,68 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 @RequiredArgsConstructor
 public class RewardManager {
 
-    private final FileManager fileManager;// não pode estar inicializada essa variavel, wtf como q n? kk, tenta inicilizar ela no método que precisa
-    @Getter private final Map<String, Reward> rewardMap = new HashMap<>();
-    private final List<ItemStack> rewardItems = new ArrayList<>();
-    private final InventorySerializer inventorySerializer;
+    private final FileManager fileManager;
+    @Getter
+    private final Map<String, Reward> rewardMap = new HashMap<>();
+    short data;
+    int amount;
+    private Material material;
 
-
-    public void createReward(int id, String name, int delay, List<ItemStack> itemStacks) {
+    public void createReward(String rewardName, int id, int delay) {
         ConfigurationSection section = fileManager.getMainSection();
-
-        section.set(name + ".id", id);
-        section.set(name + ".delay", delay);
-        section.set(name + ".serialized", inventorySerializer.encode((ItemStack) itemStacks));
+        section.set(rewardName + ".id", id);
+        section.set(rewardName + ".delay", delay);
+        section.set(rewardName + ".items", null);
         fileManager.saveConfig();
-
-        rewardMap.put(name, new Reward(id, name, delay, inventory));
     }
 
-    public Reward getRewardByName(String name) {
-        if (rewardMap.containsKey(name)) {
-            return rewardMap.get(name);
+    public Reward getRewardByName(String value) {
+        if (rewardMap.containsKey(value)) {
+            return rewardMap.get(value);
         }
+        loadRewards();
+        return rewardMap.get(value);
+    }
+
+    public Reward getRewardByID(int id) {
         ConfigurationSection section = fileManager.getMainSection();
-        for (String key : section.getKeys(false)) {
-            int id = section.getInt(key + ".id");
-            int delay = section.getInt(key + ".delay");
-            Inventory items = inventorySerializer.decode(key + ".serialized");
-            return new Reward(id, key, delay, items);
+        for (String rewardName : section.getKeys(false)) {
+            int delay = section.getInt(rewardName + ".delay");
+            int rewardID = section.getInt(rewardName + ".id");
+            Reward reward = new Reward(rewardName, rewardID, delay);
+            if (reward.getId() == id) return reward;
         }
         return null;
     }
 
-    public String getRewardList() {
-        ConfigurationSection section = fileManager.getMainSection();
-        StringBuilder sb = new StringBuilder();
-        for (String rewards : section.getKeys(false)) {
-            sb.append(rewards);
-        }
-        return sb.toString();
-    }
-
     public void loadRewards() {
-        ConfigurationSection section = fileManager.getMainSection();
-        for (String key : section.getKeys(false)) {
-            Reward reward = getRewardByName(key);
-            rewardMap.put(key, reward);
-        }
-    }
 
-    public void saveDelay() {
+
         ConfigurationSection section = fileManager.getMainSection();
-        for (String key : section.getKeys(true)) {
-            int delay = section.getInt(key + ".delay");
-            section.set(key + ".delay", delay);
+
+        for (String rewardName : section.getKeys(false)) {
+
+            int delay = section.getInt(rewardName + ".delay");
+            int id = section.getInt(rewardName + ".id");
+
+            List<ItemStack> itens = new ArrayList<>();
+
+            Material material;
+            short data;
+            int amount;
+
+            for (String materialID : section.getStringList(rewardName + ".items")) {
+
+
+                material = Material.getMaterial(Integer.parseInt(materialID.split(",")[0]));
+                data = Short.parseShort(materialID.split(",")[1]);
+                amount = Integer.parseInt(materialID.split(",")[2]);
+
+                ItemStack itemStack = new ItemStack(material, amount, data);
+                itens.add(itemStack);
+                Reward reward = new Reward(rewardName, id, delay);
+                rewardMap.put(rewardName, reward);
+            }
         }
     }
 }

@@ -1,0 +1,7 @@
+rewards:
+  default:
+    delay: 0
+    id: 0
+    items:
+      - 1,1
+      - 1,1
