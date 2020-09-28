@@ -7,9 +7,9 @@ import com.henryfabio.inventoryapi.inventory.paged.PagedInventory;
 import com.henryfabio.inventoryapi.item.InventoryItem;
 import com.henryfabio.inventoryapi.viewer.paged.PagedViewer;
 import de.tr7zw.nbtapi.NBTItem;
-import dev.lucky.managers.RewardManager;
+import dev.lucky.manager.RewardManager;
 import dev.lucky.model.Reward;
-import dev.lucky.utils.ItemComposer;
+import dev.lucky.util.ItemComposer;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +54,12 @@ public class RewardInventory extends PagedInventory {
 
             NBTItem nbtItem = new NBTItem(new ItemComposer(Material.STORAGE_MINECART)
                     .setName("§a" + reward.getName())
+                    .setLore(
+                            "",
+                            "§7Clique com o botão §e§lESQUERDO §7para pegar as recompensas.",
+                            "§7Clique com o botão §e§lDIREITO §7para ver as recompensas",
+                            ""
+                    )
                     .toItemStack());
 
             nbtItem.setString("LuckyRewards", reward.getId() + "");

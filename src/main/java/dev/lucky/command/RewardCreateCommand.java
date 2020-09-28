@@ -1,6 +1,6 @@
 package dev.lucky.command;
 
-import dev.lucky.managers.RewardManager;
+import dev.lucky.manager.RewardManager;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

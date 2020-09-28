@@ -3,4 +3,4 @@ version: ${project.version}
 main: dev.lucky.LuckyRewards
 commands:
   recompensas:
-  testar:
+  inv:

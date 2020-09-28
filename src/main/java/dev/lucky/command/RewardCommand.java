@@ -1,12 +1,18 @@
 package dev.lucky.command;
 
-public class RewardCommand {
+import com.henryfabio.inventoryapi.enums.InventoryLine;
+import dev.lucky.inventory.RewardInventory;
+import dev.lucky.manager.RewardManager;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-    /*private final RewardManager rewardManager;
+@RequiredArgsConstructor
+public class RewardCommand implements CommandExecutor {
 
-    public RewardCommand(RewardManager rewardManager) {
-        this.rewardManager = rewardManager;
-    }
+    private final RewardManager rewardManager;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
@@ -29,5 +35,5 @@ public class RewardCommand {
         return false;
     }
 
-}*/
 }
+

@@ -1,10 +1,10 @@
 package dev.lucky;
 
+import com.henryfabio.inventoryapi.manager.InventoryManager;
+import dev.lucky.command.RewardCommand;
 import dev.lucky.command.RewardCreateCommand;
-import dev.lucky.command.Test;
-import dev.lucky.listeners.RewardInteractListener;
-import dev.lucky.managers.FileManager;
-import dev.lucky.managers.RewardManager;
+import dev.lucky.manager.FileManager;
+import dev.lucky.manager.RewardManager;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -26,9 +26,10 @@ public final class LuckyRewards extends JavaPlugin {
 
         rewardManager.loadRewards();
 
-        command("testar", new Test(rewardManager, fileManager));
+        command("inv", new RewardCommand(rewardManager));
         command("recompensas", new RewardCreateCommand(rewardManager));
-        event(new RewardInteractListener(rewardManager));
+        InventoryManager.enable(this);
+
     }
 
 
