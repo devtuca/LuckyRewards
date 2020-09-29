@@ -4,9 +4,11 @@ import dev.lucky.model.Reward;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import javax.swing.text.Element;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +25,13 @@ public class RewardManager {
     private final FileManager fileManager;
     @Getter
     private final Map<String, Reward> rewardMap = new HashMap<>();
-    short data;
-    int amount;
-    List<ItemStack> itens = new ArrayList<>();
+    private final List<ItemStack> itens = new ArrayList<>();
 
-    public void createReward(String rewardName, int id, int delay) {
+    public void createReward(String rewardName, int id, long delay) {
+
         ConfigurationSection section = fileManager.getMainSection();
         section.set(rewardName + ".id", id);
         section.set(rewardName + ".delay", delay);
-        section.set(rewardName + ".items", null);
         fileManager.saveConfig();
     }
 
@@ -52,6 +52,15 @@ public class RewardManager {
             if (reward.getId() == id) return reward;
         }
         return null;
+    }
+
+    public List<Reward> getAllRewards() {
+        ConfigurationSection section = fileManager.getMainSection();
+
+            List<Reward> rewards = new ArrayList<>();
+            section.getKeys(false).forEach(rewardName -> rewards.add(getRewardByName(rewardName)));
+
+        return rewards;
     }
 
     public void loadRewards() {

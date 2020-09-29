@@ -16,7 +16,7 @@ public class Reward {
 
     private int id;
     private String name;
-    private int delay;
+    private long delay;
     private List<ItemStack> items;
 
     public Reward(String name, int id, int delay) {

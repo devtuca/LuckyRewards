@@ -29,24 +29,32 @@ public class RewardCreateCommand implements CommandExecutor {
             return false;
         }
 
-        if (args.length == 4) {
-            //recompensas criar [id] [nome] [delay]
-            if (args[0].equalsIgnoreCase("criar")) {
-                int delay;
-                int id;
+        if(args.length != 4) {
+            player.sendMessage("/recompensas criar [id] [delay] nome]");
+            return false;
+        }
 
-                try {
-                    delay = Integer.parseInt(args[3]);
-                    id = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    player.sendMessage("§cDigite um número válido de dias!");
-                    return false;
-                }
+        if (args[0].equalsIgnoreCase("criar")) {
+            int id;
+            long delay;
 
-                rewardManager.createReward(args[1], id, delay);
-                player.sendMessage("§aVocê criou uma recompensa com o nome: §2" + args[1]);
+
+            System.out.println(args[1]);
+            try {
+                id = Integer.parseInt(args[1]);
+                delay = Long.parseLong(args[2]);
+
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cDigite um número válido de dias!");
                 return false;
             }
+
+            rewardManager.createReward(args[1], id, delay);
+            player.sendMessage("");
+            player.sendMessage("§aVocê criou uma recompensa! §2(ID: " + id + "§2)");
+            player.sendMessage("§aVocê precisa setar os itens na §2config.yml §aseguindo o template!");
+            player.sendMessage("");
+            return false;
         }
         return false;
     }

@@ -3,13 +3,18 @@ package dev.lucky;
 import com.henryfabio.inventoryapi.manager.InventoryManager;
 import dev.lucky.command.RewardCommand;
 import dev.lucky.command.RewardCreateCommand;
+import dev.lucky.manager.CooldownManager;
 import dev.lucky.manager.FileManager;
 import dev.lucky.manager.RewardManager;
+import dev.lucky.model.CooldownFile;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.concurrent.TimeUnit;
 
 public final class LuckyRewards extends JavaPlugin {
 
@@ -21,12 +26,14 @@ public final class LuckyRewards extends JavaPlugin {
 
         FileManager fileManager = new FileManager(this, getConfig());
         RewardManager rewardManager = new RewardManager(fileManager);
+        CooldownFile cooldownFile = new CooldownFile(this);
+        CooldownManager cooldownManager = new CooldownManager(cooldownFile, rewardManager);
 
-        fileManager.checkSections();
 
         rewardManager.loadRewards();
+        cooldownManager.savaAllCooldown();
 
-        command("inv", new RewardCommand(rewardManager));
+        command("inv", new RewardCommand(rewardManager, cooldownManager, this));
         command("recompensas", new RewardCreateCommand(rewardManager));
         InventoryManager.enable(this);
 

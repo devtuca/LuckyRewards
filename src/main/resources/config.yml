@@ -1,7 +1,13 @@
+#rewards:
+#'Template':
+#id: this id for your reward
+#delay: this delay for your rewards (in days)
+#items:
+#- 1,1,1 (this itens for your rewards, Item ID,Data,Amount)
+
 rewards:
-  default:
-    delay: 0
-    id: 0
+  'Template':
+    id: 1
+    delay: 1
     items:
-      - 1,1,1
       - 1,1,1
